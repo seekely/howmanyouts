@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+    <head>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.6.2.min.js') }}" ></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui-1.8.15.custom.min.js') }}" ></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/howmanyouts.js') }}" ></script>
+
+        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/reset.css') }}" />
+        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/black-tie/jquery-ui-1.8.15.custom.css') }}" />
+        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/howmanyouts.css') }}" />
+
+    </head>
+
+    <body>
+
+        <div id ="content">
+
+
+            <div id="review">
+
+
+            </div>
+
+            <div id="table"  >
+
+                <div id="opp-hand1" class="hand">
+                    <div class="card card1 down"></div>
+                    <div class="card card2 down"></div>
+                </div>
+
+                <div id="opp-hand2" class="hand">
+                    <div class="card card1 down"></div>
+                    <div class="card card2 down"></div>
+                </div>
+
+                <div id="opp-hand3" class="hand">
+                    <div class="card card1 down"></div>
+                    <div class="card card2 down"></div>
+                </div>
+
+                <div id="board">
+                    <div class="card card1 down"></div>
+                    <div class="card card2 down"></div>
+                    <div class="card card3 down"></div>
+                    <div class="card card4 down"></div>
+                    <div class="card card5 down"></div>
+                </div>
+
+                <div id="player-hand" class="hand">
+                    <div class="card card1 down"></div>
+                    <div class="card card2 down"></div>
+                </div>
+
+            </div>
+
+            <div id="game">
+
+                <div id="history" class="left" >
+
+                    <div class="container">
+                        {% for i in range(1, 11) %}
+                        <span class="entry entry{{ i }} pending" onmouseup="reviewHistory({{ i }});">{{ i }}</span>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div id="controls" class="left">
+
+                    <p id="ahead"></p>
+                    <p>
+                        <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+                    </p>
+
+                    <div id="slider-horizontal" style="width:200px;"></div>
+
+                    <div>
+                        <p>
+                            <span class="option"><input type=button value="Count it!" onmouseup="gameGuess($('#amount').val());"></input></span>
+                            <span class="option"><input type=button value="Pass" onmouseup="gameGuess(100);"></input></span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <div id="time" class="left">                
+                </div>
+
+                <div id="scores" class="left">
+                    Score: <span id="score"></span>
+                    Streak: <span id="streak"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                gameStart();
+            });
+
+            $(function() {
+                    $( "#slider-horizontal" ).slider({
+                            orientation: "horizontal",
+                            range: "min",
+                            min: 0,
+                            max: 25,
+                            value: 12,
+                            slide: function( event, ui ) {
+                                    $( "#amount" ).val( ui.value );
+                            }
+                    });
+                    $( "#amount" ).val( $( "#slider-horizontal" ).slider( "value" ) );
+            });
+
+        </script>
+
+    </body>
+
+
+</html>

@@ -1,0 +1,162 @@
+/**************
+ GLOBAL
+***************/
+.left {
+    float: left;
+}
+
+/**************
+  THE TABLE
+***************/
+#table {
+    background-image: url('/static/img/table.jpg');
+    background-repeat:no-repeat;
+    height:300px;
+    position:relative;
+    width:800px;
+}
+
+#board {
+    position:absolute;
+    left:260px;
+    top: 135px;
+    width:300px;
+    height:50px;
+}
+
+#opp-hand1 {
+    top:20px;
+    left:345px;
+}
+
+#opp-hand2 {
+    top:60px;
+    left:165px;
+}
+
+#opp-hand3 {
+    top:60px;
+    right:165px;
+}
+
+#player-hand {
+    top:220px;
+    left:345px;
+}
+
+.hand {
+    position:absolute;
+    height:68px;
+    width:120px;
+}
+
+.card {
+
+    background-repeat:no-repeat;
+    float:left;
+    height:68px;
+    margin-left:10px;
+    width:50px;
+
+}
+
+.card span {
+    font-family:Gill;
+    font-size:20px;
+    font-weight:bold;
+    margin-left:5px;
+    margin-top:8px;
+}
+
+.down {
+    background-image: url('/static/img/card-back.png');
+}
+
+.club {
+    background-image: url('/static/img/card-club.png');
+}
+
+.diamond {
+    background-image: url('/static/img/card-diamond.png');
+}
+
+.heart {
+    background-image: url('/static/img/card-heart.png');
+}
+
+.spade {
+    background-image: url('/static/img/card-spade.png');
+}
+
+/**************************
+ REVIEW 
+**************************/
+
+#review {
+    background-color:black;
+    height:150px;
+    width:800px;
+}
+
+/**************************
+  CONTROLS
+**************************/
+
+#game {
+    background-color:brown;
+    height:150px;
+    width:800px;
+}
+
+#history {
+    width:220px;
+}
+
+#history .container {
+    background-color:yellow;
+    height:80px;
+    margin-left:10px;
+    margin-top:35px;
+    width:210px;
+}
+
+#history .entry {
+    float:left;
+    margin-bottom:15px;
+    margin-right:15px;
+    height:25px;
+    width:25px;
+}
+
+#history .close {
+    background-color:yellow;   
+}
+
+#history .pass {
+    background-color:orange;
+}
+
+#history .pending {
+    background-color:purple;
+}
+
+#history .perfect {
+    background-color:green;   
+}
+
+#history .wrong  {
+    background-color:red;   
+}
+
+
+#controls {
+    width:280px;
+}
+
+#time {
+    width:100px;
+}
+
+#scores {
+    width:200px;
+}
