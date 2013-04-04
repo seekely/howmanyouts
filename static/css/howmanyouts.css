@@ -1,58 +1,350 @@
 /**************
  GLOBAL
 ***************/
+
 .left {
     float: left;
 }
 
-/**************
-  THE TABLE
-***************/
-#table {
-    background-image: url('/static/img/table.jpg');
+.clear {
+    clear:both;
+}
+
+body {
+    background-image: url('/static/img/fabric_plaid.png');
+    background-repeat: repeat;
+}
+
+
+a.link {
+    font-weight:bold;
+    color:#FF3030;
+    text-decoration:none;   
+}
+
+a:visited.link  {
+    font-weight:bold;
+    color:#FF3030;
+    text-decoration:none;   
+}
+
+
+#content {
+    
+    margin-bottom: 100px;
+    margin-top: 10px;    
+
+}
+
+
+
+#game {
+    
+    margin: 50px auto 0px auto;
+    position: relative;
+    width: 750px;
+
+}
+
+#lower {
+
+    margin: 20px auto 0px auto;
+    position: relative;
+    height: 345px;
+    width: 750px;    
+
+}
+
+#introduction {
+    float:left;
+    width: 400px;        
+}
+
+#introduction p {
+    
+    font-family: 'Helvetica', sans-serif;
+    font-size:16px;
+    margin-bottom:7px;
+
+}
+
+#hiscores {    
+    float:left;    
+    margin-left:20px;
+    width: 330px;        
+}
+
+#footer {
+    margin-top:20px;
+}
+
+#footer p {    
+
+    text-align:center;        
+
+}
+
+
+/*****************
+ GAME HEADER
+ ****************/
+
+#game-header {
+    background-image:url('/static/img/dark_brick_wall.png');
+    background-repeat:repeat;    
+    color:white;    
+    height:115px;
+    width:inherit;
+
+}
+
+#game-logo {    
+    cursor:pointer;
+    float:left;
+    height:inherit;
+    width:290px;
+    
+}
+
+#game-info {    
+    float:left;
+    height:inherit;
+    width:460px;
+
+}
+
+#game-history {    
+    height:50%;
+    width:inherit;
+}
+
+#game-scores {
+    height:50%;
+    width:inherit;    
+}
+
+#game-scores p {
+    
+    padding-top:20px;
+    float:left;
+    font-family: 'Abel', sans-serif;
+    font-size:26px;
+    font-weight:bold;
+
+}
+
+#game-stake {
+    width:188px;
+}
+#game-correctness {
+    width:110px;
+}
+
+#game-stake-number {
+    font-family: 'Abel', sans-serif;
+    font-size:26px;
+    font-weight:bold;    
+    color:yellow;   
+}
+
+#game-score-number {
+    font-family: 'Abel', sans-serif;
+    font-size:26px;
+    font-weight:bold;    
+    color:yellow;   
+}
+
+#game-scores .guess-correctness  {
+    font-family: 'Abel', sans-serif;
+    text-transform:uppercase;
+}
+#game-scores .guess-perfect {
+    color:#00FF00;   
+}
+#game-scores .guess-close {
+    color:yellow;
+}
+#game-scores .guess-wrong {
+    color:#FF0000;   
+}
+
+
+
+/************************
+ HAND HISTORY            
+*************************/
+
+#game-history .entry {
+    
+    border-color:white;
+    border-radius:3px;
+    border-style:solid;
+    border-width:2px;
+    cursor:pointer;
+    float:left;
+    height:30px;
+    margin-bottom:15px;
+    margin-right:10px;
+    text-align:center;    
+    width:30px;    
+
+}
+
+#game-history .entry .num {
+    font-family:'Abel';
+    font-size:14px;
+    font-weight:bold;        
+    margin-top:10px;
+}
+
+#game-history .entry .current {
+    height:15px;
+    margin-top:12px;
+    margin-left:7px;
+}
+
+#game-history .entry .selected {
+    background-image: url('/static/img/up.png');
     background-repeat:no-repeat;
-    height:300px;
+}
+#game-history  .guess-history-close {
+    background-color:yellow;   
+    color:black;
+}
+#game-history  .guess-history-pending {
+
+}
+#game-history  .guess-history-perfect {
+    background-color:#00FF00;   
+    color:black;
+}
+#game-history  .guess-history-wrong  {
+    background-color:#FF0000;   
+    color:black;    
+}
+
+
+/*********************
+  GAME TABLE
+**********************/
+
+#game-table {
+    background-image: url('/static/img/pool_table.png');
+    background-repeat: repeat;
+    height:400px;
     position:relative;
-    width:800px;
+    width:inherit;
 }
 
-#board {
+#game-arrow {
+    background-image: url('/static/img/right-arrow.png');
     position:absolute;
-    left:260px;
-    top: 135px;
-    width:300px;
-    height:50px;
+    height:85px;    
+    left:-140px;
+    top:135px;
+    width:125px;
+
 }
 
-#opp-hand1 {
-    top:20px;
-    left:345px;
+.game-over {
+    opacity:.3;
 }
 
-#opp-hand2 {
-    top:60px;
-    left:165px;
-}
-
-#opp-hand3 {
-    top:60px;
-    right:165px;
-}
-
-#player-hand {
-    top:220px;
-    left:345px;
-}
-
-.hand {
+#game-board {
     position:absolute;
-    height:68px;
-    width:120px;
+    left:266px;
+    top:65px;
+
 }
 
-.card {
+.game-label {
 
-    background-repeat:no-repeat;
+    color:white;    
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:32px;
+    font-weight:bold;
+    text-shadow: 3px 3px 3px #333;
+}
+
+.game-label-small {
+
+    color:white;    
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:28px;
+    font-weight:bold;
+    text-shadow: 2px 2px 2px #333;
+}
+
+.game-label-tiny1 {
+
+    color:yellow;    
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:24px;
+    margin-top:5px;
+    text-shadow: 1px 1px 1px #333;    
+}
+
+.game-label-tiny2 {
+
+    color:#FF3030;    
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:24px;    
+    text-shadow: 1px 1px 1px #333;        
+}
+
+#game-label-board {
+    left:370px;
+    top:15px;
+    position:absolute;    
+}
+
+#game-label-opp {
+    right:22px;
+    top:15px;
+    position:absolute;    
+}
+
+#game-hand-opp1 {
+    right:24px;    
+    top:65px;    
+}
+
+#game-hand-opp2 {
+    right:24px;    
+    top:178px;    
+}
+
+#game-hand-opp3 {
+    right:24px;    
+    top:292px;    
+}
+
+
+#game-hand-player {
+    left:58px;    
+    top:65px;    
+}
+
+#game-label-player {
+    left:102px;
+    top:15px;
+    position:absolute;    
+}
+
+
+#game-table .hand {
+    position:absolute;
+    height:72px;
+    width:125px;
+}
+
+#game-table .card {
+
+    background-repeat:no-repeat;    
+    border-color:black;
+    border-radius:8px;
+    border-style:solid;
+    border-width:1px;
     float:left;
     height:68px;
     margin-left:10px;
@@ -60,103 +352,311 @@
 
 }
 
-.card span {
-    font-family:Gill;
+#game-table .card span {
+    font-family:'Abel', sans-serif;
     font-size:20px;
     font-weight:bold;
     margin-left:5px;
     margin-top:8px;
 }
 
-.down {
+#game-table .down {
     background-image: url('/static/img/card-back.png');
 }
 
-.club {
+#game-table .club {
     background-image: url('/static/img/card-club.png');
 }
 
-.diamond {
+#game-table .diamond {
     background-image: url('/static/img/card-diamond.png');
 }
 
-.heart {
+#game-table .heart {
     background-image: url('/static/img/card-heart.png');
 }
 
-.spade {
+#game-table .spade {
     background-image: url('/static/img/card-spade.png');
 }
+
+
+#game-status {
+    
+    background-color:black;
+    border-color:white;
+    border-radius:3px;
+    border-style:solid;
+    border-width:2px;    
+    font-family:'Abel', sans-serif;
+    left:15px;
+    position: absolute;        
+    top:150px;
+    width:217px;
+    padding:5px;
+
+}
+
+#game-status p {
+    color:#FFFFFF;
+    font-family:'Abel', sans-serif;    
+    font-size:24px;    
+    font-weight:bold;
+    height:24px;    
+    padding-left:3px;
+    
+}
+
+#game-status p.top {
+}
+
+#game-status p.bottom {
+    font-family:'Abel', sans-serif;    
+    font-size:16px;   
+    font-weight:bold;
+    height:16px;    
+    padding-left:3px;
+}
+
+#game-status .ahead {
+    color:#00DD00;
+    text-transform:uppercase;
+    font-family:'Abel', sans-serif;    
+    font-size:24px;    
+    font-weight:bold;
+}
+
+#game-status .behind {
+    color:#FF0000;
+    text-transform:uppercase;
+    font-family:'Abel', sans-serif;    
+    font-size:24px;    
+    font-weight:bold;
+}
+
+#game-status  .tied {
+    color:#FFFF00;
+    text-transform:uppercase;
+    font-family:'Abel', sans-serif;    
+    font-size:24px;    
+    font-weight:bold;
+}
+
+#game-status  .unknown {
+    color:#FFFF33;
+    text-transform:uppercase;
+    font-family:'Abel', sans-serif;    
+    font-size:24px;    
+    font-weight:bold;
+}
+
+/**************************
+  HAND CONTROLS
+**************************/
+
+#game-controls {
+    margin-top:10px;
+}
+
+#game-controls .guess-button {
+    
+    border:1px solid #999;
+    cursor:pointer;
+    color:#111;
+    font-family:'Abel', sans-serif;
+    font-size:13px;
+    font-weight:bold;
+    padding:2px 6px;
+    margin:4px;
+    height:36px;
+    width:41px;
+
+}
+
+#game-controls .guess-button-pending {    
+    background-color:#EEE;
+}
+
+#game-controls .guess-button-close {
+    background-color:yellow;   
+}
+#game-controls .guess-button-perfect {
+    background-color:#00FF00;   
+}
+
+#game-controls .guess-button-wrong  {
+    background-color:#FF0000;   
+}
+
+
 
 /**************************
  REVIEW 
 **************************/
 
-#review {
+#game-review {    
+    
+    display:none;
+    height:245px;
+    left:275px;
+    position:absolute;    
+    top:145px;    
+    width:325px;
+}
+
+#game-next-round {
+    
     background-color:black;
-    height:150px;
-    width:800px;
+
+    border:1px;
+    border-color:white;
+    border-style:solid;
+    border-radius:8px;    
+    color:yellow;    
+    cursor:pointer;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:28px;
+    font-weight:bold;
+    height:28px;
+    position:absolute;
+    text-align:center;    
+    text-shadow: 2px 2px 2px #333;    
+    width:200px;
+
+}
+
+#game-outs {
+    margin-top:5px;
+}
+
+
+#game-review .card {
+
+    margin-left:0px;
+    position:absolute;
 }
 
 /**************************
-  CONTROLS
-**************************/
+ GAME HIGH SCORES
+ **************************/
 
-#game {
-    background-color:brown;
-    height:150px;
-    width:800px;
+#game-hiscores {    
+    
+    height:205px;
+    left:275px;
+    position:absolute;    
+    top:175px;    
+    width:325px;
 }
 
-#history {
-    width:220px;
+#game-hiscores .game-hiscores-spacer {
+    width:100%;
+    height:20px;
 }
 
-#history .container {
-    background-color:yellow;
-    height:80px;
-    margin-left:10px;
-    margin-top:35px;
-    width:210px;
+
+/**************************
+ GAME OVER
+ **************************/
+
+#game-over {
+
+    background-color:black;
+    border-color:#FF3030;    
+    border-radius:4px;
+    border-style:solid;
+    border-width:4px;    
+    display:none;
+    position:absolute;
+    text-align:center;
+    left:258px;
+    top:175px;
+    width:330px;
+    height:240px;
 }
 
-#history .entry {
+#game-over h1 {
+
+    color:white;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:32px;
+    padding:5px;
+}
+
+#game-over h2 {
+
+    color:white;    
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size:18px;
+    padding:5px;
+}
+
+#game-over h1 .game-over-highlight {
+    color:yellow;
+}
+#game-over h2 .game-over-highlight {
+    color:yellow;
+}
+
+#game-over .game-over-spacer {
+    width:100%;
+    height:30px;
+}
+
+
+#game-over .game-over-button {
+
+    border:1px solid #999;
+    cursor:pointer;
+    color:#111;
+    font-family:'Abel', sans-serif;
+    font-size:13px;
+    font-weight:bold;
+    padding:2px 6px;
+    margin:4px;
+    height:36px;    
+}
+
+/**********************
+  BODY HIGH SCORES
+**********************/
+
+#hiscores h1 {
+    font-family:'Abel',sans-serif;
+    font-weight:bold;
+    font-size:18px;
+    margin:0px 0px 3px 0px;
+
+}
+
+#hiscores li {
+
+    font-family:'Abel',sans-serif;
+    font-size:16px;
+    padding:3px;
+}
+
+
+#hiscores ol {
+    list-style-type:decimal;
+    list-style-position:inside;    
+    margin-left:5px;
+}
+
+#hiscores .hiscores-section {
+    
     float:left;
+    width:330px;
     margin-bottom:15px;
-    margin-right:15px;
-    height:25px;
-    width:25px;
+
 }
 
-#history .close {
-    background-color:yellow;   
+#hiscores .hiscore-score {
+    
 }
 
-#history .pass {
-    background-color:orange;
-}
+#hiscores .hiscore-name {
+    
+    margin-left: 5px;
 
-#history .pending {
-    background-color:purple;
-}
-
-#history .perfect {
-    background-color:green;   
-}
-
-#history .wrong  {
-    background-color:red;   
-}
-
-
-#controls {
-    width:280px;
-}
-
-#time {
-    width:100px;
-}
-
-#scores {
-    width:200px;
 }

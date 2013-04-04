@@ -1,6 +1,8 @@
 *.py[cod]
 cache/*
+database/data.db
 env/*
+
 
 # C extensions
 *.so

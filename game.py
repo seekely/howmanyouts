@@ -8,11 +8,8 @@ class Game:
     A whole game of how many outs
     '''
 
-    ''' if the guess value represents a fold '''
-    GUESS_VALUE_PASS = 100
-
-    ''' if the guess value represents a forced guess '''
-    GUESS_VALUE_EXPIRE = 101
+    ''' if the guess value represents >=X '''
+    GUESS_VALUE_GREATER = 15 
 
     ''' Number of outs a player can be off in either direction and still get points '''
     GUESS_MARGIN = 2
@@ -24,16 +21,10 @@ class Game:
     ROUND_COUNT = 10
 
     ''' Starting max number of points you can get in a round before bonus '''
-    ROUND_POINTS_START = 1000
-
-    ''' Ending Max number of points you can get in a round before bonus '''
-    ROUND_POINTS_END = 10000
+    ROUND_POINTS_START = 10000
 
     ''' Starting amount of time you get in seconds in a round '''
-    ROUND_TIME_START = 60
-
-    ''' Ending amount of time you get in a round in seconds ''' 
-    ROUND_TIME_END = 20
+    ROUND_TIME_START = 75
 
     def __init__(self, id = 0):
 
@@ -41,7 +32,7 @@ class Game:
         self._rounds = []
 
         self._score = 0
-        self._streak = 0
+        self._multiplier = 1
         self._id = id
 
     def get_cur_round(self):
@@ -60,22 +51,27 @@ class Game:
     def end_round(self, guess):
         '''
         Ends the current round by registering the player's guess and adjusting
-        the socre and streak appropriately
+        the score and multiplier appropriately
         @param guess player's guess to the number of outs in the round
         '''
         a_round = self.get_cur_round()
         if (None != a_round):
 
-            time_allowed = self.get_time_allowed()
-            points_possible = self.get_points_possible()
+            time_allowed = Game.ROUND_TIME_START
+            points_possible = Game.ROUND_POINTS_START
+
+            # adjust the players guess to the correct answer if they fit in the
+            # >X territory
+            if (guess == Game.GUESS_VALUE_GREATER and len(a_round.outs) >= Game.GUESS_VALUE_GREATER):
+                guess = len(a_round.outs)
             
             # end the round.  if the player was perfect with the guess, give him
-            # lots of points.  if the player was only slightly off, give him some
-            # points.  if the player was way off, sad face
+            # lots of points and increase the multiplier.  if the player was only slightly off, give him 
+            # points but no additional multiplier.  if the player was way off, sad face
             a_round.end(guess)
             dist = a_round.guess_distance
 
-            # calculate time passed for the round giving a half second for latency.
+            # calculate time passed for the round giving a little room for latency.
             # past the first round, more points are given the faster the guess
             # comes in
             time_passed = ((a_round.time_ended - .5) - a_round.time_started)
@@ -84,34 +80,28 @@ class Game:
             time_percent = 1
             if (1 < len(self._rounds)):
                 time_percent = (time_allowed - time_passed) / time_allowed
-
+            
+            if (time_percent < 0):
+                time_percent = 0 
        
-            # we ran out of time past the first round
-            if (1 < len(self._rounds) and time_passed >= time_allowed):
-
-                a_round.points = 0
-                self._streak = 0
-
             # perfect
             elif (0 == dist):
-
-                self._streak += 1
-                a_round.points = int(round(points_possible * time_percent * self._streak))
+                
+                a_round.points = int(round(points_possible * time_percent * self._multiplier))
                 self._score += a_round.points
+                self._multiplier += 1
 
             # within margin
             elif abs(dist) <= Game.GUESS_MARGIN:
 
-                self._streak += 1
-                a_round.points = int(round(points_possible * Game.POINT_PERCENT_MARGIN * time_percent * self._streak))
+                a_round.points = int(round(points_possible * time_percent * self._multiplier * .5))
                 self._score += a_round.points
 
-            # sad guess but only end the streak if it wasn't a pass
+            # sad guess 
             else:
 
                 a_round.points = 0
-                if (guess != Game.GUESS_VALUE_PASS):
-                    self._streak = 0
+                self._multiplier = 1
 
             # if there are not any rounds remaining, end the game by putting an empty
             # round at the end
@@ -129,16 +119,32 @@ class Game:
 
         if (0 < self.rounds_remaining()):
 
-            a_round = Round(len(self._rounds) + 1)
+            # certain out scenarios (0,3,6) come up way more frequently when randomly 
+            # generating a hand.  to achieve a slightly more  distributed number of outs for each round, 
+            # if we hit when of the common cases, generate again
+            iterations = 0
+            again = True
 
-            # deal the player and number of opponents based on the streak
-            opponents = 1
-            if (7 <= self._streak):
-                opponents = 3
-            elif (4 <= self._streak):
-                opponents = 2
+            while (again):
 
-            a_round.deal(opponents)
+                a_round = Round(len(self._rounds) + 1)
+
+                # deal the player and number of opponents based on the multiplier
+                opponents = 1
+                if (6 <= self._multiplier):
+                    opponents = 3
+                elif (3 <= self._multiplier):
+                    opponents = 2
+
+                a_round.deal(opponents)
+
+                # determine if we should try again 
+                again = False
+                iterations +=1                 
+                if ((1 == opponents and len(a_round.outs) in [3, 6]  and iterations < 2)\
+                 or (0 == len(a_round.outs) and iterations < 3)):
+                    again = True
+
             self._rounds.append(a_round)
             
         return a_round
@@ -150,21 +156,15 @@ class Game:
 
     def get_points_possible(self):
         ''' Max number of points possible in the current round '''
-        points_diff = (Game.ROUND_POINTS_END - Game.ROUND_POINTS_START) / (Game.ROUND_COUNT - 1)
-        points_possible = Game.ROUND_POINTS_START + ( (len(self._rounds) - 1 ) * points_diff)
-
-        return int(points_possible)
+        return int(Game.ROUND_POINTS_START * self._multiplier)
 
     def get_time_allowed(self):
-        ''' Time allowed in the current round. The first round is infinite time '''
-
+        ''' Max amount of time in current round '''
         time_allowed = -1
-        
         if (1 < len(self._rounds)):
-            time_diff = (Game.ROUND_TIME_START - Game.ROUND_TIME_END) / (Game.ROUND_COUNT - 1)
-            time_allowed = Game.ROUND_TIME_START - ((len(self._rounds) - 1) * time_diff)
+            time_allowed = Game.ROUND_TIME_START
 
-        return int(time_allowed)
+        return time_allowed 
         
 
     # PROPERTIES
@@ -177,8 +177,8 @@ class Game:
         return self._score
 
     @property
-    def streak(self):
-        return self._streak
+    def multiplier(self):
+        return self._multiplier
 
 class Round:
     '''
@@ -202,6 +202,7 @@ class Round:
         self._dealt = False
 
         self._outs = None
+        self._draws = None
         self._ahead = None
 
         self._guess = None
@@ -281,7 +282,7 @@ class Round:
         hands.extend(self._hand_opponents)
 
         return hands
- 
+
 
     #PROPERTIES
     @property
@@ -291,6 +292,10 @@ class Round:
     @property
     def ahead(self):
         return self._ahead
+    
+    @property
+    def draws(self):
+        return self._draws        
 
     @property
     def guess(self):
@@ -324,26 +329,31 @@ class Round:
 
     def _calc_ahead(self):
         '''
-        calc if the player is ahead or behind in the hand compared to
+        calc if the player is ahead/tied/behind in the hand compared to
         the opponents
-        @return True if the player is ahead/tied, False otherwise
+        @return <0 if behind, 0 on tie, 1 if ahead
         '''
-        comp = 0
+        comp = False
         self._hand_player.make(self._board)
         for hand in self._hand_opponents:
 
             hand.make(self._board)
 
             # as soon as the player's hand loses against an opponent we be out
-            comp = self._hand_player.compare(hand)
+            temp = self._hand_player.compare(hand)
             hand.reset()
 
-            if (comp < 0):
-                break;
+            if (False == comp or temp < comp):
+                comp = temp
+
+        if (1 < comp):
+            comp = 1
+        elif (-1 > comp):
+            comp = -1        
 
         self._hand_player.reset()
 
-        return comp >= 0
+        return comp
 
     def _calc_outs(self):
         '''
@@ -351,6 +361,7 @@ class Round:
         '''
 
         self._outs = []
+        self._draws = self._deck.remaining()
 
         # go through each remaining card in the deck:
         # 1) add the card to the board
@@ -363,11 +374,15 @@ class Round:
             self._board.append(self._deck.last)
 
             # 2, # 3
-            if (self._calc_ahead() != self._ahead):
+            ahead = self._calc_ahead()
+            if ((0 <= self._ahead and 0 > ahead) 
+             or (0 > self._ahead and  0 <= ahead)):
                 self._outs.append(self._deck.last)
 
             # 4
             self._board.pop()
+
+        self._outs.sort(cards.compare_card_all)
 
 
 
@@ -385,7 +400,7 @@ if __name__ == "__main__":
         round = game.get_cur_round()
 
         # output the game state
-        print '\nT' + str(game.rounds_remaining()) + ' S' + str(game.score) + ' R' + str(game.streak)
+        print '\nT' + str(game.rounds_remaining()) + ' S' + str(game.score) + ' R' + str(game.multiplier)
 
         # output each of the hands
         hands = round.get_hands()

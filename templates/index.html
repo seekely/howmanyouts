@@ -2,13 +2,41 @@
 <html>
 
     <head>
+
+        <title>How Many Outs - A poker skill game</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="description" content="How Many Outs is a poker skill game to improve your ability to quickly identify outs in a poker hand"/>
+        <meta property="og:title" content="How Many Outs - A poker skill game"/>
+        <meta property="og:url" content="http://howmanyouts.com"/>
+        <meta property="og:image" content="{{ url_for('static', filename='img/logo_bg.png', _external='True') }}"/>
+        <meta name="medium" content="mult" />
+
+
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.6.2.min.js') }}" ></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui-1.8.15.custom.min.js') }}" ></script>
-        <script type="text/javascript" src="{{ url_for('static', filename='js/howmanyouts.js') }}" ></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/howmanyouts.js') }}?{{ version }}" ></script>
 
         <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/reset.css') }}" />
-        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/black-tie/jquery-ui-1.8.15.custom.css') }}" />
-        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/howmanyouts.css') }}" />
+        <link type="text/css" rel="stylesheet" media="all" href="{{ url_for('static', filename='css/howmanyouts.css') }}?{{ version }}" />
+        <link rel="image_src" type="image/jpeg" href="{{ url_for('static', filename='img/logo_bg.png') }}" />
+        <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+
+        {% if False == testing %}
+        <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-24995650-4']);
+          _gaq.push(['_setDomainName', 'howmanyouts.com']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+        {% endif %}
 
     </head>
 
@@ -17,104 +45,202 @@
         <div id ="content">
 
 
-            <div id="review">
-
-
-            </div>
-
-            <div id="table"  >
-
-                <div id="opp-hand1" class="hand">
-                    <div class="card card1 down"></div>
-                    <div class="card card2 down"></div>
-                </div>
-
-                <div id="opp-hand2" class="hand">
-                    <div class="card card1 down"></div>
-                    <div class="card card2 down"></div>
-                </div>
-
-                <div id="opp-hand3" class="hand">
-                    <div class="card card1 down"></div>
-                    <div class="card card2 down"></div>
-                </div>
-
-                <div id="board">
-                    <div class="card card1 down"></div>
-                    <div class="card card2 down"></div>
-                    <div class="card card3 down"></div>
-                    <div class="card card4 down"></div>
-                    <div class="card card5 down"></div>
-                </div>
-
-                <div id="player-hand" class="hand">
-                    <div class="card card1 down"></div>
-                    <div class="card card2 down"></div>
-                </div>
-
-            </div>
-
             <div id="game">
 
-                <div id="history" class="left" >
+                <div id="game-header">
 
-                    <div class="container">
-                        {% for i in range(1, 11) %}
-                        <span class="entry entry{{ i }} pending" onmouseup="reviewHistory({{ i }});">{{ i }}</span>
-                        {% endfor %}
+                    <div id="game-logo" onmouseup="gameStart();">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="How Many Outs"/>
+                    </div>
+
+                    <div id="game-info">
+
+                        <div id="game-scores">
+                            <p id="game-correctness" class="guess-correctness"></p>
+                            <p id="game-stake">At Stake: <span id="game-stake-number"></span></p>
+                            <p id="game-score">Score: <span id="game-score-number"></span></p>
+                        </div>
+
+                        <div id="game-history" >
+                            {% for i in range(1, 11) %}
+                                <div class="entry entry{{ i }} guess-history-pending" onmouseup="reviewRound({{ i }});">
+                                    <div class="num">{{ i }}</div>
+                                    <div class="current"></div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div id="game-table"  >
+
+                    <div id="game-arrow"></div>
+
+                    <span id="game-label-opp" class="game-label">OPPONENTS</span>
+                    <div id="game-hand-opp1" class="hand">
+                        <div class="card card1 down"></div>
+                        <div class="card card2 down"></div>
+                    </div>
+
+
+                    <div id="game-hand-opp2" class="hand">
+                        <div class="card card1 down"></div>
+                        <div class="card card2 down"></div>
+                    </div>
+
+
+                    <div id="game-hand-opp3" class="hand">
+                        <div class="card card1 down"></div>
+                        <div class="card card2 down"></div>
+                    </div>
+
+                    <span id="game-label-board" class="game-label">THE BOARD</span>
+                    <div id="game-board">
+                        <div class="card card1 down"></div>
+                        <div class="card card2 down"></div>
+                        <div class="card card3 down"></div>
+                        <div class="card card4 down"></div>
+                        <div class="card card5 down"></div>
+                    </div>
+
+                    <span id="game-label-player" class="game-label">YOU</span>
+                    <div id="game-hand-player" class="hand">
+                        <div class="card card1 down"></div>
+                        <div class="card card2 down"></div>
+                    </div>
+
+
+                    <div id="game-status">
+
+                        <p class="top"></p>
+                        <p class="bottom"></p>
+
+                        <div id="game-controls" class="left">
+                            <span><input class="guess-button guess-button0" type=button value="0" onmouseup="gameGuess(0);"></input></span>
+                            <span><input class="guess-button guess-button1" type=button value="1" onmouseup="gameGuess(1);"></input></span>
+                            <span><input class="guess-button guess-button2" type=button value="2" onmouseup="gameGuess(2);"></input></span>
+                            <span><input class="guess-button guess-button3" type=button value="3" onmouseup="gameGuess(3);"></input></span>
+                            <span><input class="guess-button guess-button4" type=button value="4" onmouseup="gameGuess(4);"></input></span>
+                            <span><input class="guess-button guess-button5" type=button value="5" onmouseup="gameGuess(5);"></input></span>
+                            <span><input class="guess-button guess-button6" type=button value="6" onmouseup="gameGuess(6);"></input></span>
+                            <span><input class="guess-button guess-button7" type=button value="7" onmouseup="gameGuess(7);"></input></span>
+                            <span><input class="guess-button guess-button8" type=button value="8" onmouseup="gameGuess(8);"></input></span>
+                            <span><input class="guess-button guess-button9" type=button value="9" onmouseup="gameGuess(9);"></input></span>
+                            <span><input class="guess-button guess-button10" type=button value="10" onmouseup="gameGuess(10);"></input></span>
+                            <span><input class="guess-button guess-button11" type=button value="11" onmouseup="gameGuess(11);"></input></span>
+                            <span><input class="guess-button guess-button12" type=button value="12" onmouseup="gameGuess(12);"></input></span>
+                            <span><input class="guess-button guess-button13" type=button value="13" onmouseup="gameGuess(13);"></input></span>
+                            <span><input class="guess-button guess-button14" type=button value="14" onmouseup="gameGuess(14);"></input></span>
+                            <span><input class="guess-button guess-button15" type=button value=">14" onmouseup="gameGuess(15);"></input></span>
+                        </div>
+
+                    </div>
+
+                    <div id="game-review" >
+                        <p class="game-label-small">OUTS: <span id="game-outs-count"></span></p>
+                        <div id="game-outs"></div>
+                        <div id="game-next-round" onmouseup="gameRound();" style="display:none">DEAL NEXT ROUND</div>
+                    </div>
+
+                    <div id="game-hiscores" >
+                        <p class="game-label-small">HIGH SCORE THIS WEEK</p>
+                        <p class="game-label-tiny1 game-hiscores-interval-score"></p>
+                        <p class="game-label-tiny2 game-hiscores-interval-name"></p>
+                        <div class="game-hiscores-spacer"></div>
+                        <p class="game-label-small">HIGH SCORE ALL TIME</p>
+                        <p class="game-label-tiny1 game-hiscores-all-score"></p>
+                        <p class="game-label-tiny2 game-hiscores-all-name"></p>
                     </div>
 
                 </div>
 
-                <div id="controls" class="left">
+                <div id="game-over">
+                    <h1>Score: <span class="game-over-highlight game-over-score"></span></h1>
+                    <h2>Ranks <span class="game-over-highlight game-over-rank-interval"></span> this week</h2>
+                    <h2>Ranks <span class="game-over-highlight game-over-rank"></span> all time</h2>
+                    <h2>Is your name <input onkeypress="changeName();" class="game-over-name" size="16" maxlength="32" type="text" value="" />?</h2>
+                    <div class="game-over-spacer"></div>
+                    <h2>Brag on
 
-                    <p id="ahead"></p>
+                    <a href="http://www.facebook.com/sharer.php?u=http://howmanyouts.com/" target="_new" class="link"><img src="{{ url_for('static', filename='img/fb.png') }}" /> Facebook</a>
+
+                    and
+
+                    <a href="#" target="_new" class="game-over-twitter link"><img src="{{ url_for('static', filename='img/twitter.png') }}" /> Twitter</a></h2>
+
+                    <input type=button class="game-over-button" value="New Game" onmouseup="gameStart(); $('#game-over').hide;"></input>
+                    <input type=button class="game-over-button" value="Review" onmouseup="$('#game-over').hide(); $('#game-table').removeClass('game-over');"></input>
+
+                </div>
+
+
+            </div>
+
+            <div class="clear"></div>
+
+            <div id="lower">
+
+                <div id="introduction">
                     <p>
-                        <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+                        How Many Outs is a poker skill game to improve your ability to quickly identify outs in a poker hand.
                     </p>
+                    <p>
+                        Each round, you are presented with a poker situation with only the river card remaining to be dealt.
+                    </p>
+                    <p>
+                        If your hand is beating or tied with the opponents' hand, determine how many cards remaining
+                        in the deck result in an opponent's outright win.  If your hand is behind the opponents' hand,
+                        determine how many cards result in your win or tie.
+                    </p>
+                    <p>
+                        Each correct answer scores you points.  Consecutive correct answers score more points.
+                        Past the first round, the faster you answer the more points you score.
+                    </p>
+                    <p>
+                        Good luck!
+                    </p>
+                </div>
 
-                    <div id="slider-horizontal" style="width:200px;"></div>
+                <div id="hiscores">
 
-                    <div>
-                        <p>
-                            <span class="option"><input type=button value="Count it!" onmouseup="gameGuess($('#amount').val());"></input></span>
-                            <span class="option"><input type=button value="Pass" onmouseup="gameGuess(100);"></input></span>
-                        </p>
+                    <div id="hiscores-interval" class="hiscores-section">
+                        <h1>Weekly Top High Scores</h1>
+                        <ol id="hiscores-list-interval"  class="hiscores-list"></ol>
                     </div>
 
-                </div>
+                    <div id="hiscores-all" class="hiscores-section">
+                        <h1>All Time Top High Scores</h1>
+                        <ol id="hiscores-list-all"  class="hiscores-list"></ol>
+                    </div>
 
-                <div id="time" class="left">                
-                </div>
-
-                <div id="scores" class="left">
-                    Score: <span id="score"></span>
-                    Streak: <span id="streak"></span>
                 </div>
 
             </div>
 
-        </div>
 
+            <div class="clear"></div>
+
+            <div id="footer">
+
+                <p>Created by <a target='_new' class="link" href="http://seekely.com">Ryan Seekely</a>.  Feedback welcome via <a target='_new' class="link" href="mailto:ryan.seekely@happykoalas.com">ryan.seekely@happykoalas.com</a>.</p>
+                <p>Source code available on <a target="_new" class="link" href="https://bitbucket.org/seekely/howmanyouts">Bitbucket</a>.</p>
+
+            </div>
+
+
+        </div>
 
         <script type="text/javascript">
 
             $(document).ready(function() {
-                gameStart();
-            });
 
-            $(function() {
-                    $( "#slider-horizontal" ).slider({
-                            orientation: "horizontal",
-                            range: "min",
-                            min: 0,
-                            max: 25,
-                            value: 12,
-                            slide: function( event, ui ) {
-                                    $( "#amount" ).val( ui.value );
-                            }
-                    });
-                    $( "#amount" ).val( $( "#slider-horizontal" ).slider( "value" ) );
+                $.ajaxSetup({ cache: false });
+                gameStart();
+                refreshHiScores();
+
             });
 
         </script>

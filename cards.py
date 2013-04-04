@@ -23,6 +23,20 @@ def compare_card_suit(card1, card2):
 
     return comp
 
+''' 
+Compares two cards first by rank then by suit
+@param card1
+@param card2
+@return >=1 if card1 is greater, <= -1 if card2 is greater, 0 if equal
+'''
+def compare_card_all(card1, card2):
+
+    comp = card1.rank - card2.rank    
+    if (0 == comp):
+        comp = card1.suit - card2.suit
+
+    return comp
+
 
 '''
 Compares two hands by rank
@@ -433,7 +447,7 @@ class Hand:
         if (False != kind1):
 
             remove_rank = kind1[1][0].rank
-            for card in combined:
+            for card in combined[:]:
                 if (remove_rank == card.rank):
                     combined.remove(card)
 
@@ -599,6 +613,47 @@ if __name__ == "__main__":
     hand = Hand(hole1, hole2)
     hand.make(combined)
     print '13 ' + str(Hand.RANKING_2_PAIR == hand.rank) + ' ' + str(12 == hand.made[0].rank)
+
+    combined = [Card(0, 14, 3), Card(0, 14, 1), Card(0, 5, 3), Card(0, 2, 2)]
+
+    hole1 = Card(0, 13, 1)
+    hole2 = Card(0, 2, 3)
+    hand1 = Hand(hole1, hole2)
+    hand1.make(combined)
+
+    hole1 = Card(0, 3, 2)
+    hole2 = Card(0, 2, 0) 
+    hand2 = Hand(hole1, hole2)
+    hand2.make(combined)
+
+    print '13a ' + str(Hand.RANKING_2_PAIR == hand1.rank) + ' ' + str(14 == hand1.made[0].rank)
+    print '13b ' + str(Hand.RANKING_2_PAIR == hand2.rank) + ' ' + str(14 == hand2.made[0].rank)   
+    print '13c ' + str(-1 >= hand2.compare(hand1))
+    print '13d ' + str(1 <= hand1.compare(hand2))
+    print '13e ' + str(0 != hand1.compare(hand2))    
+    print '13f ' + str(0 == hand1.compare(hand1))
+    print '13g ' + str(0 == hand2.compare(hand2))
+
+    combined = [Card(0, 13, 3), Card(0, 6, 1), Card(0, 13, 3), Card(0, 12, 2), Card(0, 12, 2)]
+
+    hole1 = Card(0, 6, 1)
+    hole2 = Card(0, 4, 3)
+    hand1 = Hand(hole1, hole2)
+    hand1.make(combined)
+
+    hole1 = Card(0, 9, 2)
+    hole2 = Card(0, 2, 0) 
+    hand2 = Hand(hole1, hole2)
+    hand2.make(combined)
+
+    print '13h ' + str(Hand.RANKING_2_PAIR == hand1.rank) + ' ' + str(13 == hand1.made[0].rank)
+    print '13i ' + str(Hand.RANKING_2_PAIR == hand2.rank) + ' ' + str(13 == hand2.made[0].rank)   
+    print '13j ' + str(-1 >= hand1.compare(hand2))
+    print '13k ' + str(1 <= hand2.compare(hand1))
+    print '13l ' + str(0 != hand1.compare(hand2))    
+    print '13m ' + str(0 == hand1.compare(hand1))
+    print '13n ' + str(0 == hand2.compare(hand2))
+
 
 
     # testing for a pair
