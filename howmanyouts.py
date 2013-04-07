@@ -1,4 +1,5 @@
 from contextlib import closing
+import inspect
 import os
 import pickle
 import random
@@ -17,18 +18,14 @@ from flask import url_for
 
 import game
 
+'''
+*************
+   GLOBALS
+*************
+'''
+
 # Version of html game to force Css/Js refresh
 VERSION = 7
-
-
-# Location of database
-DATABASE = '/srv/www/howmanyouts.com/howmanyouts/database/data.db'
-SCHEMA = '/srv/www/howmanyouts.com/howmanyouts/database/schema.sql'    
-
-if __name__ == '__main__':
-    DATABASE = 'database/data.db'
-    SCHEMA = 'database/schema.sql'
-   
 
 # Timestamp for when leaderboards started
 LEADERBOARD_START = 1327168800
@@ -36,11 +33,21 @@ LEADERBOARD_START = 1327168800
 # Interval in seconds between leaderboard resets
 LEADERBOARD_INTERVAL = 604800
 
-# FLASK
+# Directory of this top level module
+DIR_TOP = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+
+'''
+*************
+   APP 
+*************
+'''
+
 app = Flask(__name__)
 app.debug = False
 app.testing = False
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
 
 
 @app.route('/', methods = ['GET'])
@@ -316,7 +323,7 @@ def get_round_info(a_game):
 '''
 
 def connect_db():
-    return sqlite3.connect(DATABASE)
+    return sqlite3.connect(FILE_DATABASE)
 
 @app.before_request
 def before_request():
@@ -344,10 +351,35 @@ def write_db(query, args = (), commit = True):
 
 
 def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource(SCHEMA) as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+
+
+    if not os.path.exists(FILE_DATABASE):
+        try:
+            
+            print 'Initing database at ' + FILE_DATABASE       
+            
+            open(FILE_DATABASE, 'w').close()
+            with closing(connect_db()) as db:
+                with app.open_resource(FILE_SCHEMA) as f:
+                    db.cursor().executescript(f.read())
+                db.commit()
+
+        except Exception as e:
+           print 'Error creating dataabase: ' + e.strerror
+
+
+'''
+********************
+    DATABASE INIT 
+********************
+'''
+
+# Database dealings
+FILE_DATABASE = DIR_TOP + '/database/data.db'
+FILE_SCHEMA = DIR_TOP + '/database/schema.sql'    
+   
+init_db()
+
 
 '''
 ********************
