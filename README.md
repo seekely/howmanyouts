@@ -1,10 +1,12 @@
-Overview
+How Many Outs
 ===========
 
-How Many Outs (http://howmanyouts.com) is a web based poker game to improve your ability to quickly identify outs in a poker hand.  This is my first Python project, so be nice!
+http://howmanyouts.com
+
+I am all about poker.  To help make myself a pinch better, I created a web based poker game to improve my ability to quickly identify outs in a poker hand.  This is my first Python and Flask project, so be nice!  
 
 
-Getting started
+Development
 ===========
 
 How Many Out is built in Python on top of the [Flask](http://flask.pocoo.org/) microframework.  The quickest way to get started is with virtualenv and a few pip installs.
