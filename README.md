@@ -1,21 +1,33 @@
-How Many Outs
-===========
+![Quagen](/static/img/logo_bg.png?raw=true)
 
-http://howmanyouts.com
+How Many Outs is a poker based game to help improve your ability to quickly identify outs in a poker hand. This was my very first time programming in Python, so things would look a bit different if I were to do the project again 😛
 
-I am all about poker.  To help make myself a pinch better, I created a web based poker game to improve my ability to quickly identify outs in a poker hand.  This is my first Python and Flask project, so be nice!  
+You can play the game at http://howmanyouts.com
+
+You can read more about creating the game at https://seekely.com/funthings/howmanyouts/
 
 
-Development
-===========
+# Contributions 
 
-How Many Out is built in Python on top of the [Flask](http://flask.pocoo.org/) microframework.  The quickest way to get started is with virtualenv and a few pip installs.
+This is an old personal side project not under development, but I welcome contributions! Before 
+embarking on any big change or contribution, I encourage  opening a discussion 
+ticket first so we can align and avoid either one of us wasting effort. When 
+opening a pull request, ensure your code has tests and follows the code styling 
+tools. 
+  
+The repository is under the MIT license, so feel free to fork and take the 
+project in your own direction!
 
-    sudo easy_install virtualenv
+# Development
+
+How Many Outs is built with Python(= 2.7), [Flask][flask], [SQLite][sqlite], and old school [JQuery][jquery]. To get started developing, run the below and then Open up http://127.0.0.1:5000 to play/debug!
+
     cd howmanyouts
-    virtualenv env
-    env/bin/activiate
+    virtualenv venv
+    source venv/bin/activate 
     pip install Flask
     python howmanyouts.py
 
-Open up http://127.0.0.1:5000 to play/debug!
+[flask]: https://palletsprojects.com/p/flask/
+[sqlite]: https://www.sqlite.org/
+[jquery]: https://jquery.com/
